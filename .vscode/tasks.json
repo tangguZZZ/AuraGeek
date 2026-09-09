@@ -1,0 +1,9 @@
+{
+ "version":"2.0.0",
+ "tasks":[
+  {"label":"AuraGeek: Simulator","type":"process","command":"powershell.exe","args":["-NoProfile","-ExecutionPolicy","Bypass","-File","${workspaceFolder}/tools/simulator.ps1","run"],"problemMatcher":[]},
+  {"label":"AuraGeek: Official LVGL Demo","type":"process","command":"powershell.exe","args":["-NoProfile","-ExecutionPolicy","Bypass","-File","${workspaceFolder}/tools/simulator.ps1","demo"],"problemMatcher":[]},
+  {"label":"AuraGeek: UI replay test","type":"process","command":"powershell.exe","args":["-NoProfile","-ExecutionPolicy","Bypass","-File","${workspaceFolder}/tools/simulator.ps1","test"],"problemMatcher":[]},
+  {"label":"AuraGeek: Daily stock cache","type":"process","command":"powershell.exe","args":["-NoProfile","-ExecutionPolicy","Bypass","-File","${workspaceFolder}/tools/simulator.ps1","stocks"],"problemMatcher":[]}
+ ]
+}

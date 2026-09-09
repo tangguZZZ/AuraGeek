@@ -1,0 +1,11 @@
+# CH343 115200: local UI replay only, no stock budget reset or network request.
+stock status
+ui menu
+ui stocks
+range 2
+ui next
+range 4
+ui spectrum
+ui agent
+ui home
+stock status

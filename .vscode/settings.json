@@ -1,0 +1,8 @@
+{
+  "cmake.sourceDirectory": "${workspaceFolder}/simulator",
+  "cmake.cmakePath": "D:/LVGL-Dev/tools/cmake-4.4.0-windows-x86_64/bin/cmake.exe",
+  "cmake.useCMakePresets": "always",
+  "cmake.configureOnOpen": false,
+  "files.exclude": {"**/.pio": true,"simulator/build": true},
+  "search.exclude": {"**/.pio": true,"simulator/build": true,"simulator/cache": true}
+}

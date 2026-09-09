@@ -1,0 +1,15 @@
+{
+  "version": 6,
+  "configurePresets": [{
+    "name": "windows-debug", "generator": "Ninja", "binaryDir": "${sourceDir}/build/windows-debug",
+    "environment": {"PATH": "D:/LVGL-Dev/tools/mingw64-15.2.0/mingw64/bin;$penv{PATH}"},
+    "cacheVariables": {
+      "CMAKE_BUILD_TYPE": "Debug",
+      "CMAKE_C_COMPILER": "D:/LVGL-Dev/tools/mingw64-15.2.0/mingw64/bin/gcc.exe",
+      "CMAKE_CXX_COMPILER": "D:/LVGL-Dev/tools/mingw64-15.2.0/mingw64/bin/g++.exe",
+      "CMAKE_MAKE_PROGRAM": "D:/LVGL-Dev/tools/ninja-1.13.1/ninja.exe",
+      "SDL2_DIR": "D:/LVGL-Dev/tools/SDL2-2.32.10/x86_64-w64-mingw32/lib/cmake/SDL2"
+    }
+  }],
+  "buildPresets": [{"name":"windows-debug", "configurePreset":"windows-debug", "jobs":8}]
+}
