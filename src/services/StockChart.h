@@ -13,7 +13,9 @@ struct StockChart {
   size_t count=0, total=0, visible=0;
   float first=0, last=0, low=0, high=0, change=0;
   uint32_t firstDate=0,lastDate=0;
-  char ticker[8]="QQQ", status[64]="WAITING FOR DAILY DATA";
+  char ticker[11]="QQQ",currency[4]="USD", status[64]="WAITING FOR DAILY DATA";
+  unsigned maFast=20,maSlow=55;
+  bool showFast=true,showSlow=true;
 };
 // Compute moving averages on original daily bars BEFORE range selection/downsampling.
 // NaN means insufficient history, never a fabricated zero-price MA.
@@ -33,15 +35,18 @@ inline void makeStockChart(const StockBar* bars,size_t count,unsigned range,Stoc
   double sum20=0,sum55=0;size_t target=begin,j=0;
   for(size_t i=0;i<count;++i){
     sum20+=bars[i].close;sum55+=bars[i].close;
-    if(i>=20)sum20-=bars[i-20].close;if(i>=55)sum55-=bars[i-55].close;
+    const unsigned fast=std::max(2u,std::min(120u,out.maFast)),slow=std::max(3u,std::min(250u,out.maSlow));
+    if(i>=fast)sum20-=bars[i-fast].close;if(i>=slow)sum55-=bars[i-slow].close;
     if(i<begin)continue;
     out.low=std::min(out.low,bars[i].close);out.high=std::max(out.high,bars[i].close);
     if(i==target&&j<out.count){
-      out.close[j]=bars[i].close;out.ma20[j]=i>=19?float(sum20/20):NAN;out.ma55[j]=i>=54?float(sum55/55):NAN;
+      out.close[j]=bars[i].close;out.ma20[j]=out.showFast&&i+1>=fast?float(sum20/fast):NAN;out.ma55[j]=out.showSlow&&i+1>=slow?float(sum55/slow):NAN;
       if(std::isfinite(out.ma20[j])){out.low=std::min(out.low,out.ma20[j]);out.high=std::max(out.high,out.ma20[j]);}
       if(std::isfinite(out.ma55[j])){out.low=std::min(out.low,out.ma55[j]);out.high=std::max(out.high,out.ma55[j]);}
       ++j;if(j<out.count)target=begin+(j*(out.visible-1))/(out.count-1);
     }
   }
+  // Keep a flat or single-sample series readable, instead of pinning it to the bottom.
+  if(out.high-out.low<.000001f){const float pad=std::max(std::abs(out.last)*.01f,.0001f);out.low=std::max(0.f,out.low-pad);out.high+=pad;}
 }
 }}

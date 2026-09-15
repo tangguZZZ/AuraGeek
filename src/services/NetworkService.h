@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Arduino.h>
+#include "services/NetworkCredentials.h"
 
 namespace aurageek {
 namespace services {
@@ -14,7 +15,7 @@ class NetworkService {
     const char* password;
   };
 
-  // Credentials are tried in the supplied order. Only this allow-list is used.
+  // Prefer a saved provisioned network; otherwise use the development allow-list.
   void begin(const Credential* credentials, size_t credentialCount);
   void process();
   bool connected() const;
@@ -32,6 +33,8 @@ class NetworkService {
   State state_ = State::kDisconnected;
   uint32_t stateStartedMs_ = 0;
   uint32_t nextAttemptMs_ = 0;
+  NetworkCredentials savedNetwork_;
+  Credential savedCredential_{};
 };
 
 }  // namespace services

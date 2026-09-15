@@ -5,7 +5,9 @@
 // file has no disabled `#if 0` wrapper. Options omitted here use LVGL defaults.
 #define LV_COLOR_DEPTH 16
 #define LV_USE_GIF 1
-#define LV_MEM_SIZE (384 * 1024)
+#define LV_MEM_SIZE (1024 * 1024)
+#define LV_USE_SNAPSHOT 1
+#define LV_DEF_REFR_PERIOD 16
 #define LV_MEM_POOL_INCLUDE "config/LvglMemory.h"
 #define LV_MEM_POOL_ALLOC aurageek_lvgl_pool_alloc
 
@@ -13,6 +15,8 @@
 #define LV_LOG_LEVEL LV_LOG_LEVEL_WARN
 #define LV_LOG_PRINTF 0
 
+#define LV_FONT_MONTSERRAT_8 1
+#define LV_FONT_MONTSERRAT_10 1
 #define LV_FONT_MONTSERRAT_12 1
 #define LV_FONT_MONTSERRAT_14 1
 #define LV_FONT_MONTSERRAT_16 1

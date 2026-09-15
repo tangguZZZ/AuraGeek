@@ -40,7 +40,7 @@ void TimeService::process(bool networkConnected) {
     synchronized_ = true;
     // NTPClient applies the display timezone. POSIX time and persisted retry
     // deadlines must be UTC, not the shifted display epoch.
-    timeval utc{static_cast<time_t>(client_.getEpochTime()-config::kUtcOffsetSeconds),0};
+    timeval utc{static_cast<time_t>(client_.getEpochTime()-offsetSeconds_),0};
     // update() also returns true between NTP exchanges; retain subsecond time.
     const double drift=difftime(utc.tv_sec,time(nullptr));
     if(drift>2.0||drift< -2.0)settimeofday(&utc,nullptr);

@@ -1,6 +1,7 @@
 #include "services/NetworkService.h"
 
 #include <WiFi.h>
+#include "services/FactoryReset.h"
 
 namespace {
 constexpr uint32_t kConnectTimeoutMs = 15000U;
@@ -13,6 +14,11 @@ namespace services {
 void NetworkService::begin(const Credential* credentials, size_t credentialCount) {
   credentials_ = credentials;
   credentialCount_ = credentialCount;
+  if(FactoryReset<Preferences>::userNetworkOnly()){credentials_=nullptr;credentialCount_=0;}
+  if(savedNetwork_.load()){
+    savedCredential_={savedNetwork_.ssid.c_str(),savedNetwork_.password.c_str()};
+    credentials_=&savedCredential_;credentialCount_=1;
+  }
   credentialIndex_ = 0;
   WiFi.mode(WIFI_STA);
   WiFi.persistent(false);

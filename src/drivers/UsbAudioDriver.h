@@ -3,16 +3,19 @@
 #include <atomic>
 #include "services/SpectrumAnalyzer.h"
 namespace aurageek { namespace drivers {
+class VoiceAudio;
 // USB receive callback only fills a bounded PCM ring; FFT/UI run in loop().
 class UsbAudioDriver {
  public:
   bool begin();
+  void attachSpeaker(VoiceAudio& speaker) { speaker_=&speaker; }
   void process();
   bool active() const;
   const float* bands() const {return fft_.bands();}
  private:
   static void receive(void* data,uint16_t bytes);
   static UsbAudioDriver* instance_;
+  VoiceAudio* speaker_=nullptr;
   portMUX_TYPE lock_=portMUX_INITIALIZER_UNLOCKED;
   int16_t ring_[2048]{};
   unsigned write_=0,read_=0;
