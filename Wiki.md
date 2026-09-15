@@ -1,6 +1,8 @@
 # AuraGeek 当前调试基线
 
-更新：2026-09-12。工程：D:/My_Project/AuraGeek。
+更新：2026-09-15。工程：D:/My_Project/AuraGeek。
+
+项目总览、架构与首次构建流程见 [README](README.md)；本页维护当前接线、详细操作及实机验证边界。
 
 ## 当前硬件与固件
 
