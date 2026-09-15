@@ -18,8 +18,11 @@ class UiService {
 
   void setNetwork(bool connected, bool connecting, int rssi);
   void setClock(bool valid, const char* timeText, const char* dateText);
-  void setWeather(bool valid, const char* weatherText, int weatherCode);
+  void setWeather(bool valid, const char* weatherText, int weatherCode,
+                  const float* hourlyTemperature = nullptr,
+                  size_t hourlyCount = 0);
   void setIndoorUnavailable();
+  void setIndoor(bool valid, float temperature, float humidity);
   void setAiPending();
   AuraUi& screen() { return editorUi_; }
 
@@ -28,6 +31,7 @@ class UiService {
   static void log(lv_log_level_t level, const char* message);
 
   AuraUi editorUi_;
+  drivers::DisplayDriver* displayDriver_=nullptr;
   bool ready_ = false;
 };
 

@@ -32,4 +32,6 @@
 // GPIO matrix pin assignment above.
 #define USE_HSPI_PORT 1
 
-#define SPI_FREQUENCY 20000000
+// User-requested 80 MHz experiment; panel/cable reliability is not qualified.
+// Revert to 20000000 for the previously tested baseline.
+#define SPI_FREQUENCY 80000000

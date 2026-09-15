@@ -1,4 +1,5 @@
 #include "drivers/UsbAudioDriver.h"
+#include "drivers/VoiceAudio.h"
 #include <USB.h>
 #include <USBAudioCard.h>
 #include <cstring>
@@ -18,6 +19,7 @@ void UsbAudioDriver::receive(void* data,uint16_t bytes){
   auto* s=instance_;if(!s||bytes<4)return;
   audio.applyVolume(data,bytes);
   const auto* pcm=static_cast<const int16_t*>(data);
+  if(s->speaker_)s->speaker_->acceptUsb(pcm,bytes/4);
   portENTER_CRITICAL(&s->lock_);
   for(unsigned i=0;i+1<bytes/2;i+=2){
     unsigned next=(s->write_+1)%2048;
@@ -35,6 +37,7 @@ void UsbAudioDriver::process(){
   if(count>=512){read_=(write_+2048-512)%2048;for(auto& v:frame){v=ring_[read_];read_=(read_+1)%2048;}ready=true;}
   uint32_t packets=packets_,overruns=overruns_;portEXIT_CRITICAL(&lock_);
   if(ready||!active())fft_.process(frame);
+  if(now-lastLog_>=2000)Serial.printf("[UAC HOST] master_db=%d left_db=%d right_db=%d mute=%u/%u/%u\n",int(audio.volume(UAC_Channel(0))),int(audio.volume(UAC_Channel(1))),int(audio.volume(UAC_Channel(2))),unsigned(audio.mute(UAC_Channel(0))),unsigned(audio.mute(UAC_Channel(1))),unsigned(audio.mute(UAC_Channel(2))));
   if(now-lastLog_>=2000){lastLog_=now;float peak=0;unsigned band=0;for(unsigned i=0;i<48;++i)if(fft_.bands()[i]>peak){peak=fft_.bands()[i];band=i;}Serial.printf("[UAC] pcm_packets=%lu overwritten_samples=%lu active=%d fft_peak=%.3f band=%u peak_hz=%.1f rate=%lu bits=%u\n",(unsigned long)packets,(unsigned long)overruns,active(),peak,band,fft_.peakHz(),(unsigned long)audio.sampleRate(),unsigned(audio.bitsPerSample()));}
 }
 }}

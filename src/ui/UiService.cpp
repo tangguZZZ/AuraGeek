@@ -8,6 +8,7 @@ namespace aurageek {
 namespace ui {
 
 bool UiService::begin(drivers::DisplayDriver& displayDriver) {
+  displayDriver_=&displayDriver;
   if (!psramFound()) { Serial.println("[UI] N16R8 PSRAM required for UI and GIF"); return false; }
   lv_init();
   lv_tick_set_cb(tickMillis);
@@ -37,7 +38,9 @@ bool UiService::begin(drivers::DisplayDriver& displayDriver) {
 
 void UiService::process() {
   if (ready_) {
+    displayDriver_->process();
     lv_timer_handler();
+    displayDriver_->process();
   }
 }
 
@@ -49,12 +52,19 @@ void UiService::setClock(bool valid, const char* timeText, const char* dateText)
   if (ready_) editorUi_.setClock(valid, timeText, dateText);
 }
 
-void UiService::setWeather(bool valid, const char* weatherText, int weatherCode) {
-  if (ready_) editorUi_.setWeather(valid, weatherText, weatherCode);
+void UiService::setWeather(bool valid, const char* weatherText, int weatherCode,
+                           const float* hourlyTemperature, size_t hourlyCount) {
+  if (ready_)
+    editorUi_.setWeather(valid, weatherText, weatherCode, hourlyTemperature,
+                         hourlyCount);
 }
 
 void UiService::setIndoorUnavailable() {
   if (ready_) editorUi_.setIndoorUnavailable();
+}
+
+void UiService::setIndoor(bool valid, float temperature, float humidity) {
+  if (ready_) editorUi_.setIndoor(valid, temperature, humidity);
 }
 
 void UiService::setAiPending() {
